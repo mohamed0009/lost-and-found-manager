@@ -248,80 +248,57 @@ const ItemManagement: React.FC = () => {
 
   const handleSubmit = async () => {
     if (!validateForm()) return;
-    
+
     try {
       const token = TokenService.getToken();
       const formDataToSend = new FormData();
       
-      formDataToSend.append('description', formData.description);
-      formDataToSend.append('location', formData.location);
-      formDataToSend.append('type', formData.type);
-      formDataToSend.append('category', formData.category);
-      formDataToSend.append('status', selectedItem?.status || 'pending');
+      formDataToSend.append('Description', formData.description);
+      formDataToSend.append('Location', formData.location);
+      formDataToSend.append('Type', formData.type);
+      formDataToSend.append('Category', formData.category);
+      formDataToSend.append('Status', 'pending');
 
       if (formData.imageFile) {
         formDataToSend.append('Image', formData.imageFile);
-      } else {
+      } else if (formData.imageUrl) {
         formDataToSend.append('ImageUrl', formData.imageUrl);
       }
 
-      const config = {
-        headers: {
-          'Authorization': `Bearer ${token}`,
+      const response = await axios.post(
+        'https://localhost:7186/api/Admin/items',
+        formDataToSend,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          }
         }
-      };
+      );
 
-      let response: { data: Item };
-      
-      if (editMode && selectedItem) {
-        response = await axios.put<Item>(
-          `https://localhost:7186/api/Admin/items/${selectedItem.id}`,
-          formDataToSend,
-          config
-        );
-
-      setItems(prevItems => 
-        prevItems.map(item => 
-            item.id === selectedItem.id 
-              ? {
-                  ...response.data,
-                  imageUrl: response.data.imageUrl || item.imageUrl
-                }
-              : item
-          )
-        );
-
-        setSnackbar({
-          open: true,
-          message: 'Item modifié avec succès',
-          severity: 'success'
-        });
-      } else {
-        response = await axios.post<Item>(
-          'https://localhost:7186/api/Admin/items',
-          formDataToSend,
-          config
-        );
-
-        setItems(prevItems => [...prevItems, response.data]);
-        
-        setSnackbar({
-          open: true,
-          message: 'Item ajouté avec succès',
-          severity: 'success'
-        });
-      }
-
-      setOpenDialog(false);
       await fetchItems();
-
-    } catch (error: any) {
-      console.error('Error saving item:', error);
-      console.error('Error details:', error.response?.data);
+      setOpenDialog(false);
       
       setSnackbar({
         open: true,
-        message: error.response?.data?.message || 'Erreur lors de la sauvegarde de l\'objet',
+        message: 'Objet ajouté avec succès',
+        severity: 'success'
+      });
+
+      setFormData({
+        description: '',
+        location: '',
+        type: 'Lost',
+        category: '',
+        imageUrl: '',
+        imageFile: undefined,
+        imagePreview: undefined
+      });
+
+    } catch (error: any) {
+      console.error('Error details:', error.response || error);
+      setSnackbar({
+        open: true,
+        message: error.response?.data?.message || 'Erreur lors de l\'ajout de l\'objet',
         severity: 'error'
       });
     }
