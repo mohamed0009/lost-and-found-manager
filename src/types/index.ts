@@ -38,7 +38,7 @@ export interface User {
   role: "Admin" | "User";
   status: "active" | "inactive";
   lastLogin: string;
-  createdAt: string;
+  createdAt?: string;
   password?: string;
 }
 
