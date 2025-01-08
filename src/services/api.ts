@@ -54,4 +54,14 @@ export const adminApi = {
   getItems: () => api.get("/admin/items"),
 };
 
+export const createUser = async (userData: {
+  email: string;
+  password: string;
+  name: string;
+  role: string;
+}) => {
+  const response = await axios.post("/api/admin/users", userData);
+  return response.data;
+};
+
 export default api;
