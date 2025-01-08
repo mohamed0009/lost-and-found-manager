@@ -188,24 +188,6 @@ const UserManagement = () => {
     }
   };
 
-  if (loading) return (
-    <Box 
-      sx={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        minHeight: '60vh',
-        flexDirection: 'column',
-        gap: 2
-      }}
-    >
-      <CircularProgress size={40} />
-      <Typography variant="body1" color="text.secondary">
-        Chargement des données...
-      </Typography>
-    </Box>
-  );
-
   if (error) return (
     <Fade in timeout={500}>
       <Typography color="error">{error}</Typography>

@@ -103,9 +103,6 @@ const ItemManagement: React.FC = () => {
 
   useEffect(() => {
     fetchItems();
-    setTimeout(() => {
-      setPageLoaded(true);
-   }, 300);
   }, []);
 
   const fetchItems = async () => {
@@ -130,6 +127,7 @@ const ItemManagement: React.FC = () => {
       } else {
         setError('Format de données invalide');
       }
+      setPageLoaded(true);
       setLoading(false);
     } catch (error: any) {
       console.error('Error details:', error.response || error);
@@ -329,7 +327,6 @@ const ItemManagement: React.FC = () => {
     }
   };
 
-  if (loading) return <Typography>Chargement...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
 
   return (
