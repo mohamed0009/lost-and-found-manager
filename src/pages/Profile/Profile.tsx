@@ -163,12 +163,12 @@ const Profile = () => {
                 <Grid item xs={12} md={4}>
                   <Box sx={{ textAlign: 'center' }}>
                     <Avatar
-                      sx={{
+                sx={{
                         width: 120,
                         height: 120,
                         mx: 'auto',
                         mb: 2,
-                        bgcolor: 'primary.main',
+                  bgcolor: 'primary.main',
                         fontSize: '3rem'
                       }}
                     >
@@ -178,9 +178,9 @@ const Profile = () => {
                       {user?.name}
                     </Typography>
                     <Typography color="text.secondary" gutterBottom>
-                      {user?.role}
-                    </Typography>
-                  </Box>
+                {user?.role}
+              </Typography>
+            </Box>
                 </Grid>
 
                 {/* Détails du profil */}
@@ -192,26 +192,26 @@ const Profile = () => {
                     <Divider sx={{ mb: 3 }} />
                     
                     <Grid container spacing={2}>
-                      <Grid item xs={12}>
+                <Grid item xs={12}>
                         <Typography color="text.secondary">Email</Typography>
                         <Typography variant="body1" sx={{ mb: 2 }}>
                           {user?.email}
                         </Typography>
-                      </Grid>
+                </Grid>
 
-                      <Grid item xs={12}>
+                <Grid item xs={12}>
                         <Typography color="text.secondary">Statut du compte</Typography>
                         <Typography variant="body1" sx={{ mb: 2 }}>
                           {user?.status === 'active' ? 'Actif' : 'Inactif'}
-                        </Typography>
+                  </Typography>
                       </Grid>
-                    </Grid>
+                </Grid>
 
                     <Box sx={{ mt: 4 }}>
-                      <Button
-                        variant="contained"
+                  <Button
+                    variant="contained"
                         onClick={() => setOpenDialog(true)}
-                        sx={{
+                    sx={{
                           borderRadius: 2,
                           px: 4,
                           py: 1.5,
@@ -226,7 +226,7 @@ const Profile = () => {
                         }}
                       >
                         Modifier le profil
-                      </Button>
+                  </Button>
                     </Box>
                   </Box>
                 </Grid>
@@ -334,20 +334,20 @@ const Profile = () => {
         </Dialog>
 
         {/* Snackbar de succès */}
-        <Snackbar
+      <Snackbar
           open={success}
           autoHideDuration={6000}
           onClose={() => setSuccess(false)}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        >
-          <Alert 
+      >
+        <Alert 
             onClose={() => setSuccess(false)} 
-            severity="success"
-            sx={{ width: '100%' }}
-          >
-            Profil mis à jour avec succès
-          </Alert>
-        </Snackbar>
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          Profil mis à jour avec succès
+        </Alert>
+      </Snackbar>
       </Box>
     </Fade>
   );

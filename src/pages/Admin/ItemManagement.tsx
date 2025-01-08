@@ -250,19 +250,17 @@ const ItemManagement: React.FC = () => {
     if (!validateForm()) return;
 
     try {
-      const token = TokenService.getToken();
       const formDataToSend = new FormData();
       
-      formDataToSend.append('Description', formData.description);
-      formDataToSend.append('Location', formData.location);
+      formDataToSend.append('Description', formData.description.trim());
+      formDataToSend.append('Location', formData.location.trim());
       formDataToSend.append('Type', formData.type);
-      formDataToSend.append('Category', formData.category);
-      formDataToSend.append('Status', 'pending');
+      formDataToSend.append('Category', formData.category.trim());
 
       if (formData.imageFile) {
-        formDataToSend.append('Image', formData.imageFile);
+        formDataToSend.append('Image', formData.imageFile, formData.imageFile.name);
       } else if (formData.imageUrl) {
-        formDataToSend.append('ImageUrl', formData.imageUrl);
+        formDataToSend.append('ImageUrl', formData.imageUrl.trim());
       }
 
       const response = await axios.post(
@@ -270,20 +268,19 @@ const ItemManagement: React.FC = () => {
         formDataToSend,
         {
           headers: {
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `Bearer ${TokenService.getToken()}`
           }
         }
       );
 
+      if (response.data) {
       await fetchItems();
       setOpenDialog(false);
-      
       setSnackbar({
         open: true,
         message: 'Objet ajouté avec succès',
         severity: 'success'
       });
-
       setFormData({
         description: '',
         location: '',
@@ -293,9 +290,14 @@ const ItemManagement: React.FC = () => {
         imageFile: undefined,
         imagePreview: undefined
       });
-
+      }
     } catch (error: any) {
-      console.error('Error details:', error.response || error);
+      console.error('Error details:', {
+        error: error,
+        response: error.response,
+        data: error.response?.data
+      });
+      
       setSnackbar({
         open: true,
         message: error.response?.data?.message || 'Erreur lors de l\'ajout de l\'objet',
